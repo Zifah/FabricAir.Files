@@ -1,13 +1,10 @@
-using Microsoft.AspNetCore.Authorization;
+using FabricAir.Files.Api.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Web.Resource;
 
 namespace FabricAir.Files.Api.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("[controller]")]
-    [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
@@ -16,22 +13,18 @@ namespace FabricAir.Files.Api.Controllers
     };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ApplicationDbContext _dbContext;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, ApplicationDbContext dbContext)
         {
             _logger = logger;
+            _dbContext = dbContext;
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        public IEnumerable<User> Get()
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+            return _dbContext.Users.ToList();
         }
     }
 }
