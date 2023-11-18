@@ -4,6 +4,7 @@ using FabricAir.Files.Api.Data;
 using FabricAir.Files.Api.Model;
 using System.Net;
 using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.Options;
 
 namespace FabricAir.Files.Api.Controllers
 {
@@ -19,7 +20,6 @@ namespace FabricAir.Files.Api.Controllers
             _context = context;
         }
 
-        // GET: api/Users
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
         {
@@ -33,7 +33,9 @@ namespace FabricAir.Files.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<UserDTO>> PostUser([FromBody] CreateUserRequest user)
+        [ProducesDefaultResponseType(typeof(UserDTO))]
+        public async Task<IActionResult> PostUser([FromBody] CreateUserRequest user,
+            [FromServices] IOptions<ApiBehaviorOptions> apiBehaviorOptions)
         {
             if (!ModelState.IsValid)
             {
@@ -52,7 +54,7 @@ namespace FabricAir.Files.Api.Controllers
             if (role == null)
             {
                 ModelState.AddModelError(nameof(user.Role), "The specific user role is not valid");
-                return BadRequest(ModelState);
+                return apiBehaviorOptions.Value.InvalidModelStateResponseFactory(ControllerContext);
             }
 
             try
@@ -72,7 +74,7 @@ namespace FabricAir.Files.Api.Controllers
 
         private async Task<User> SaveUser(CreateUserRequest user, string password, Role role)
         {
-            var newUser = new User(user!.FirstName, user.LastName, user.Username, user.Email, password);
+            var newUser = new User(user.FirstName, user.LastName, user.Username, user.Email, password);
             newUser.Roles.Add(role);
 
             _context.Users.Add(newUser);
