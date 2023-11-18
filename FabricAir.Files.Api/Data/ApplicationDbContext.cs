@@ -8,39 +8,34 @@ public partial class ApplicationDbContext : DbContext
 
     public DbSet<File> Files { get; set; }
     public DbSet<User> Users { get; set; }
-    public DbSet<UserRole> UserRoles { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<FileGroup> FileGroups { get; set; }
-    public DbSet<RoleFileGroup> RoleFileGroups { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<UserRole>()
-            .HasKey(ur => new { ur.UserId, ur.RoleId });
+        modelBuilder.Entity<Role>(entity =>
+        {
+            entity.HasIndex(u => u.Name).IsUnique();
+        });
 
-        // Define the relationship between UserRoles and User & Role entities
-        modelBuilder.Entity<UserRole>()
-            .HasOne(ur => ur.User)
-            .WithMany(u => u.UserRoles)
-            .HasForeignKey(ur => ur.UserId);
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasIndex(u => u.Username).IsUnique();
+            entity.HasIndex(u => u.Email).IsUnique();
+            entity.HasMany(u => u.Roles).WithMany(r => r.Users).UsingEntity(j => j.ToTable("UserRoles"));
+        });
 
-        modelBuilder.Entity<UserRole>()
-            .HasOne(ur => ur.Role)
-            .WithMany(r => r.UserRoles)
-            .HasForeignKey(ur => ur.RoleId);
-
-        modelBuilder.Entity<RoleFileGroup>()
-            .HasKey(rfg => new { rfg.RoleId, rfg.FileGroupId });
+        modelBuilder.Entity<FileGroup>(entity =>
+        {
+            entity.HasIndex(fg => fg.Name).IsUnique();
+            entity.HasMany(fg => fg.Roles).WithMany(r => r.FileGroups).UsingEntity(j => j.ToTable("RoleFileGroups"));
+        });
 
         // Define the relationship between RoleFileGroups and Role & FileGroup entities
-        modelBuilder.Entity<RoleFileGroup>()
-            .HasOne(rfg => rfg.Role)
-            .WithMany(r => r.RoleFileGroups)
-            .HasForeignKey(rfg => rfg.RoleId);
-
-        modelBuilder.Entity<RoleFileGroup>()
-            .HasOne(rfg => rfg.FileGroup)
-            .WithMany(fg => fg.RoleFileGroups)
-            .HasForeignKey(rfg => rfg.FileGroupId);
+        modelBuilder.Entity<File>(entity =>
+        {
+            entity.HasIndex(f => f.Name).IsUnique();
+            entity.HasOne(f => f.Group).WithMany(g => g.Files).HasForeignKey(f => f.GroupId);
+        });
     }
 }
