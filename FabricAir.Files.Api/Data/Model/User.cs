@@ -1,8 +1,6 @@
-﻿using static FabricAir.Files.Api.Data.ApplicationDbContext;
+﻿namespace FabricAir.Files.Api.Data;
 
-namespace FabricAir.Files.Api.Data;
-
-public record User(int Id, string FirstName, string LastName, string Username, string Email)
+public record User(string FirstName, string LastName, string Username, string Email, string Password, int Id = 0)
 {
-    public ICollection<UserRole> UserRoles { get; init; } = new List<UserRole>();
+    public ICollection<Role> Roles { get; init; } = new List<Role>();
 }
