@@ -20,7 +20,6 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasIndex(u => u.Username).IsUnique();
             entity.HasIndex(u => u.Email).IsUnique();
             entity.HasMany(u => u.Roles).WithMany(r => r.Users).UsingEntity(j => j.ToTable("UserRoles"));
         });

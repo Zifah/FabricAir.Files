@@ -10,9 +10,6 @@ namespace FabricAir.Files.Api.Model
         [Required(ErrorMessage = "Last name is required")]
         public string LastName { get; init; } = string.Empty;
 
-        [Required(ErrorMessage = "Username is required")]
-        public string Username { get; init; } = string.Empty;
-
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Invalid email address")]
         public string Email { get; init; } = string.Empty;

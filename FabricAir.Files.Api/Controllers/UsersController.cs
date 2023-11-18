@@ -74,7 +74,7 @@ namespace FabricAir.Files.Api.Controllers
 
         private async Task<User> SaveUser(CreateUserRequest user, string password, Role role)
         {
-            var newUser = new User(user.FirstName, user.LastName, user.Username, user.Email, password);
+            var newUser = new User(user.FirstName, user.LastName, user.Email, password);
             newUser.Roles.Add(role);
 
             _context.Users.Add(newUser);
@@ -82,7 +82,7 @@ namespace FabricAir.Files.Api.Controllers
             return newUser;
         }
 
-        private static UserDTO ToDTO(User u) => new(u.Id, u.FirstName, u.LastName, u.Username, u.Email)
+        private static UserDTO ToDTO(User u) => new(u.Id, u.FirstName, u.LastName, u.Email)
         {
             Roles = u.Roles.Select(r => r.Name)
         };
