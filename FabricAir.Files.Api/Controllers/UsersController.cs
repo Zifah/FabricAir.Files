@@ -12,22 +12,22 @@ namespace FabricAir.Files.Api.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _dbContext;
         private const int SqlLiteUniqueConstraintViolatedErrorCode = 19;
 
-        public UsersController(ApplicationDbContext context)
+        public UsersController(ApplicationDbContext dbContext)
         {
-            _context = context;
+            _dbContext = dbContext;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
         {
-            if (_context.Users == null)
+            if (_dbContext.Users == null)
             {
                 return NotFound();
             }
-            return await _context.Users.Include(u => u.Roles)
+            return await _dbContext.Users.Include(u => u.Roles)
                                 .Select(u => ToDTO(u))
                                 .ToListAsync();
         }
@@ -42,14 +42,14 @@ namespace FabricAir.Files.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (_context.Users == null)
+            if (_dbContext.Users == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.Users' is null.");
             }
 
             var password = HashPassword(user.Password);
 
-            var role = await _context.Roles.SingleOrDefaultAsync(r => r.Name == user.Role);
+            var role = await _dbContext.Roles.SingleOrDefaultAsync(r => r.Name == user.Role);
 
             if (role == null)
             {
@@ -66,7 +66,7 @@ namespace FabricAir.Files.Api.Controllers
             {
                 if (exception.SqliteErrorCode == SqlLiteUniqueConstraintViolatedErrorCode)
                 {
-                    return BadRequest("Email address and sername must be unique");
+                    return BadRequest("User is already registered.");
                 }
                 throw;
             }
@@ -77,8 +77,8 @@ namespace FabricAir.Files.Api.Controllers
             var newUser = new User(user.FirstName, user.LastName, user.Email, password);
             newUser.Roles.Add(role);
 
-            _context.Users.Add(newUser);
-            await _context.SaveChangesAsync();
+            _dbContext.Users.Add(newUser);
+            await _dbContext.SaveChangesAsync();
             return newUser;
         }
 
