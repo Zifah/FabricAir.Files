@@ -40,7 +40,7 @@ namespace FabricAir.Files.Api.Data.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Files");
+                    b.ToTable("Files", (string)null);
                 });
 
             modelBuilder.Entity("FabricAir.Files.Api.Data.FileGroup", b =>
@@ -58,7 +58,7 @@ namespace FabricAir.Files.Api.Data.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("FileGroups");
+                    b.ToTable("FileGroups", (string)null);
                 });
 
             modelBuilder.Entity("FabricAir.Files.Api.Data.Role", b =>
@@ -80,7 +80,7 @@ namespace FabricAir.Files.Api.Data.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("FabricAir.Files.Api.Data.User", b =>
@@ -110,7 +110,7 @@ namespace FabricAir.Files.Api.Data.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("FileGroupRole", b =>
