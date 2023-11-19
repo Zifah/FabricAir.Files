@@ -5,6 +5,8 @@ using FabricAir.Files.Api.Model;
 using System.Net;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Options;
+using FabricAir.Files.Api.Data.Entities;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace FabricAir.Files.Api.Controllers
 {
@@ -13,14 +15,17 @@ namespace FabricAir.Files.Api.Controllers
     public class UsersController : ControllerBase
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly IOptions<ApiBehaviorOptions> _apiBehaviorOptions;
         private const int SqlLiteUniqueConstraintViolatedErrorCode = 19;
 
-        public UsersController(ApplicationDbContext dbContext)
+        public UsersController(ApplicationDbContext dbContext, IOptions<ApiBehaviorOptions> apiBehaviorOptions)
         {
             _dbContext = dbContext;
+            _apiBehaviorOptions = apiBehaviorOptions;
         }
 
         [HttpGet]
+        [SwaggerOperation("Fetch all users")]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
         {
             if (_dbContext.Users == null)
@@ -34,8 +39,8 @@ namespace FabricAir.Files.Api.Controllers
 
         [HttpPost]
         [ProducesDefaultResponseType(typeof(UserDTO))]
-        public async Task<IActionResult> PostUser([FromBody] CreateUserRequest user,
-            [FromServices] IOptions<ApiBehaviorOptions> apiBehaviorOptions)
+        [SwaggerOperation("Create a new user")]
+        public async Task<IActionResult> PostUser([FromBody] CreateUserRequest user)
         {
             if (!ModelState.IsValid)
             {
@@ -54,7 +59,7 @@ namespace FabricAir.Files.Api.Controllers
             if (role == null)
             {
                 ModelState.AddModelError(nameof(user.Role), "The specific user role is not valid");
-                return apiBehaviorOptions.Value.InvalidModelStateResponseFactory(ControllerContext);
+                return _apiBehaviorOptions.Value.InvalidModelStateResponseFactory(ControllerContext);
             }
 
             try

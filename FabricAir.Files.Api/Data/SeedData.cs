@@ -1,4 +1,7 @@
-﻿namespace FabricAir.Files.Api.Data;
+﻿using FabricAir.Files.Api.Data.Entities;
+using File = FabricAir.Files.Api.Data.Entities.File;
+
+namespace FabricAir.Files.Api.Data;
 public class SeedData
 {
     public static void Initialize(ApplicationDbContext context)

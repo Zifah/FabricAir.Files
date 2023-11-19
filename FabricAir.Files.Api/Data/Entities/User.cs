@@ -1,4 +1,4 @@
-﻿namespace FabricAir.Files.Api.Data;
+﻿namespace FabricAir.Files.Api.Data.Entities;
 
 public record User(string FirstName, string LastName, string Email, string Password, int Id = 0)
 {

@@ -1,12 +1,10 @@
 ﻿using FabricAir.Files.Api.Data;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Reflection.Metadata;
-using System.Text.RegularExpressions;
 using FabricAir.Files.Api.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.Annotations;
+using FabricAir.Files.Api.Data.Entities;
 
 namespace FabricAir.Files.Api.Controllers
 {
@@ -24,6 +22,7 @@ namespace FabricAir.Files.Api.Controllers
         }
 
         [HttpGet("/Users/{userId}")]
+        [SwaggerOperation("Fetch all files that a user has access to")]
         [ProducesDefaultResponseType(typeof(IEnumerable<FileDTO>))]
         public async Task<IActionResult> GetUserFiles(int userId,
             [FromServices] IOptions<ApiBehaviorOptions> apiBehaviorOptions)
@@ -42,6 +41,7 @@ namespace FabricAir.Files.Api.Controllers
         }
 
         [HttpGet("/Groups/Users/{userId}")]
+        [SwaggerOperation("Fetch all file-groups that a user has access to")]
         [ProducesDefaultResponseType(typeof(IEnumerable<FileGroupDTO>))]
         public async Task<IActionResult> GetUserFileGroups(int userId)
         {
@@ -63,8 +63,9 @@ namespace FabricAir.Files.Api.Controllers
 
         // TODO Hafiz: Create this action after implementing authentication
         // iii. Files/Groups (mine) (any user) ; 15 minutes
+        // iv. Files (mine)
 
-        private async Task<IEnumerable<FileDTO>> ToDTOAsync(IQueryable<Data.File> userFiles) =>
+        private static async Task<IEnumerable<FileDTO>> ToDTOAsync(IQueryable<Data.Entities.File> userFiles) =>
             await userFiles.Select(f => new FileDTO(f.Name, f.Group.Name, f.URL)).ToListAsync();
     }
 }

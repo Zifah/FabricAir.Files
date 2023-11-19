@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FabricAir.Files.Api.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace FabricAir.Files.Api.Data;
 // Define your DbContext
@@ -6,7 +7,7 @@ public partial class ApplicationDbContext : DbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
-    public DbSet<File> Files { get; set; }
+    public DbSet<Entities.File> Files { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<FileGroup> FileGroups { get; set; }
@@ -31,7 +32,7 @@ public partial class ApplicationDbContext : DbContext
         });
 
         // Define the relationship between RoleFileGroups and Role & FileGroup entities
-        modelBuilder.Entity<File>(entity =>
+        modelBuilder.Entity<Entities.File>(entity =>
         {
             entity.HasIndex(f => f.Name).IsUnique();
             entity.HasOne(f => f.Group).WithMany(g => g.Files).HasForeignKey(f => f.GroupId);
