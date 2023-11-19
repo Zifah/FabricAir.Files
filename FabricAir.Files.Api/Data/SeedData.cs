@@ -29,14 +29,14 @@ public class SeedData
     {
         if (!context.FileGroups.Any())
         {
-            var administrators = context.Roles.Single(r => r.Name == "Administrator");
-            var salespersons = context.Roles.Single(r => r.Name == "Salesperson");
-            var webDesigners = context.Roles.Single(r => r.Name == "Web designer");
+            var administrators = context.Roles.Single(r => r.Name == Constants.UserRoleAdministrator);
+            var salespersons = context.Roles.Single(r => r.Name == Constants.UserRoleSalesPerson);
+            var webDesigners = context.Roles.Single(r => r.Name == Constants.UserRoleWebDesigner);
 
-            var pictureGroup = new FileGroup("Pictures");
-            var manualsGroup = new FileGroup("Manuals");
-            var drawingsGroup = new FileGroup("Drawings");
-            var reportsGroup = new FileGroup("Reports");
+            var pictureGroup = new FileGroup(Constants.FileGroupPictures);
+            var manualsGroup = new FileGroup(Constants.FileGroupManuals);
+            var drawingsGroup = new FileGroup(Constants.FileGroupDrawings);
+            var reportsGroup = new FileGroup(Constants.FileGroupReports);
 
             administrators.FileGroups.Add(pictureGroup);
             administrators.FileGroups.Add(manualsGroup);

@@ -25,11 +25,32 @@ class Program
         ConfigureAuthentication(services, key);
 
         services.AddControllers();
-        services.AddEndpointsApiExplorer(); 
+        services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(c =>
         {
             c.EnableAnnotations();
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "FabricAir Files API", Version = "v1" });
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                In = ParameterLocation.Header,
+                BearerFormat = "JWT",
+                Description = "Please insert JWT token into field",
+                Name = "Authorization",
+                Type = SecuritySchemeType.ApiKey
+            });
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    Array.Empty<string>()
+                }
+            });
         });
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlite(configuration.GetConnectionString("DefaultConnection")));

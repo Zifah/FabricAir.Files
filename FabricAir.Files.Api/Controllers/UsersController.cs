@@ -7,11 +7,13 @@ using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Options;
 using FabricAir.Files.Api.Data.Entities;
 using Swashbuckle.AspNetCore.Annotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FabricAir.Files.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = Constants.UserRoleAdministrator)]
     public class UsersController : ControllerBase
     {
         private readonly ApplicationDbContext _dbContext;
