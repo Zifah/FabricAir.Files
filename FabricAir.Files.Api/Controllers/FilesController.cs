@@ -15,13 +15,14 @@ namespace FabricAir.Files.Api.Controllers
     public class FilesController : ControllerBase
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly IOptions<ApiBehaviorOptions> _apiBehaviorOptions;
 
-        public FilesController(ApplicationDbContext dbContext)
+        public FilesController(ApplicationDbContext dbContext, IOptions<ApiBehaviorOptions> apiBehaviorOptions)
         {
             _dbContext = dbContext;
+            _apiBehaviorOptions = apiBehaviorOptions;
         }
 
-        // iv. Files/Users/{{UserId}} (user as parameter) (administrator); 15 minutes
         [HttpGet("/Users/{userId}")]
         [ProducesDefaultResponseType(typeof(IEnumerable<FileDTO>))]
         public async Task<IActionResult> GetUserFiles(int userId,
@@ -36,21 +37,34 @@ namespace FabricAir.Files.Api.Controllers
             }
 
             var userFiles = _dbContext.Files.Where(f => f.Group.Roles.Any(r => user.Roles.Contains(r)));
-            IEnumerable<FileDTO> response = await ToDTOAsync(userFiles);
+            var response = await ToDTOAsync(userFiles);
             return Ok(response);
         }
 
-        private async Task<IEnumerable<FileDTO>> ToDTOAsync(IQueryable<Data.File> userFiles) => 
-            await userFiles.Select(f => new FileDTO(f.Name, f.Group.Name, f.URL)).ToListAsync();
-
-        // v. Files/Groups/Users/{{UserId}}(user as parameter) (administrator); 15 minutes(90 minutes)
         [HttpGet("/Groups/Users/{userId}")]
-        public async Task<ActionResult<IEnumerable<FileGroupDTO>>> GetUserFileGroups(int userId)
+        [ProducesDefaultResponseType(typeof(IEnumerable<FileGroupDTO>))]
+        public async Task<IActionResult> GetUserFileGroups(int userId)
         {
-            throw new NotImplementedException();
+            var user = _dbContext.Users.Include(u => u.Roles).SingleOrDefault(x => x.Id == userId);
+
+            if (user == null)
+            {
+                ModelState.AddModelError(nameof(userId), "The specific userId is not valid");
+                return _apiBehaviorOptions.Value.InvalidModelStateResponseFactory(ControllerContext);
+            }
+
+            var userFileGroups = _dbContext.FileGroups.Where(g => g.Roles.Any(r => user.Roles.Contains(r)));
+            var response = await ToDTOAsync(userFileGroups);
+            return Ok(response);
         }
+
+        private async Task<IEnumerable<FileGroupDTO>> ToDTOAsync(IQueryable<FileGroup> userFileGroups) =>
+            await userFileGroups.Select(fg => new FileGroupDTO(fg.Name)).ToListAsync();
 
         // TODO Hafiz: Create this action after implementing authentication
         // iii. Files/Groups (mine) (any user) ; 15 minutes
+
+        private async Task<IEnumerable<FileDTO>> ToDTOAsync(IQueryable<Data.File> userFiles) =>
+            await userFiles.Select(f => new FileDTO(f.Name, f.Group.Name, f.URL)).ToListAsync();
     }
 }
