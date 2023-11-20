@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace FabricAir.Files.Data.Data.Migrations
+namespace FabricAir.Files.Data.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
