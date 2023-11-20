@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using FabricAir.Files.Data.Entities;
 using Swashbuckle.AspNetCore.Annotations;
 using Microsoft.AspNetCore.Authorization;
+using FabricAir.Files.Data.Repositories;
 
 namespace FabricAir.Files.Api.Controllers
 {
@@ -16,13 +17,18 @@ namespace FabricAir.Files.Api.Controllers
     [Authorize(Roles = Constants.UserRoleAdministrator)]
     public class UsersController : ControllerBase
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly UserRepository _userRepository;
+        private readonly RoleRepository _roleRepository;
         private readonly IOptions<ApiBehaviorOptions> _apiBehaviorOptions;
         private const int SqlLiteUniqueConstraintViolatedErrorCode = 19;
 
-        public UsersController(ApplicationDbContext dbContext, IOptions<ApiBehaviorOptions> apiBehaviorOptions)
+        public UsersController(
+            UserRepository userRepository, 
+            RoleRepository roleRepository, 
+            IOptions<ApiBehaviorOptions> apiBehaviorOptions)
         {
-            _dbContext = dbContext;
+            _userRepository = userRepository;
+            _roleRepository = roleRepository;
             _apiBehaviorOptions = apiBehaviorOptions;
         }
 
@@ -30,13 +36,8 @@ namespace FabricAir.Files.Api.Controllers
         [SwaggerOperation("Fetch all users")]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
         {
-            if (_dbContext.Users == null)
-            {
-                return NotFound();
-            }
-            return await _dbContext.Users.Include(u => u.Roles)
-                                .Select(u => ToDTO(u))
-                                .ToListAsync();
+            var allUsers = await _userRepository.GetAllAsync();
+            return Ok(allUsers.Select(ToDTO));
         }
 
         [HttpPost]
@@ -49,14 +50,9 @@ namespace FabricAir.Files.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (_dbContext.Users == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.Users' is null.");
-            }
-
             var password = HashPassword(user.Password);
 
-            var role = await _dbContext.Roles.SingleOrDefaultAsync(r => r.Name == user.Role);
+            var role = await _roleRepository.GetByName(user.Role);
 
             if (role == null)
             {
@@ -81,11 +77,11 @@ namespace FabricAir.Files.Api.Controllers
 
         private async Task<User> SaveUser(CreateUserRequest user, string password, Role role)
         {
-            var newUser = new User(user.FirstName, user.LastName, user.Email, password);
-            newUser.Roles.Add(role);
-
-            _dbContext.Users.Add(newUser);
-            await _dbContext.SaveChangesAsync();
+            var newUser = new User(user.FirstName, user.LastName, user.Email, password)
+            {
+                Roles = new Role[] { role }
+            };
+            _ = await _userRepository.Create(newUser);
             return newUser;
         }
 

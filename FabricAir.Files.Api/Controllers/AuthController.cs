@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Swashbuckle.AspNetCore.Annotations;
-using FabricAir.Files.Api.Model;
-using FabricAir.Files.Data;
 using FabricAir.Files.Data.Entities;
+using FabricAir.Files.Data.Repositories;
+using FabricAir.Files.Api.Model;
 
 namespace FabricAir.Files.Api.Controllers
 {
@@ -16,13 +15,13 @@ namespace FabricAir.Files.Api.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly UserRepository _userRepository;
         private readonly IOptions<JwtSettings> _jwtSettings;
         private const int TokenExpirationTimeMinutes = 60;
 
-        public AuthController(ApplicationDbContext dbContext, IOptions<JwtSettings> jwtSettings)
+        public AuthController(UserRepository userRepository, IOptions<JwtSettings> jwtSettings)
         {
-            _dbContext = dbContext;
+            _userRepository = userRepository;
             _jwtSettings = jwtSettings;
         }
 
@@ -30,7 +29,7 @@ namespace FabricAir.Files.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(UserLoginDTO userDto)
         {
-            var user = await _dbContext.Users.Include(u => u.Roles).SingleOrDefaultAsync(u => u.Email == userDto.Email);
+            var user = await _userRepository.GetByEmailAsync(userDto.Email);
 
             if (user == null || !VerifyHashedPassword(user.Password, userDto.Password))
             {

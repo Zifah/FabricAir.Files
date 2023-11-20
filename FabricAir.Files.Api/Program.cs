@@ -1,4 +1,5 @@
 using FabricAir.Files.Data;
+using FabricAir.Files.Data.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -54,6 +55,8 @@ class Program
         });
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlite(configuration.GetConnectionString("DefaultConnection")));
+        services.AddTransient<UserRepository>();
+        services.AddTransient<RoleRepository>();
     }
 
     static void ConfigureAuthentication(IServiceCollection services, byte[] key)
