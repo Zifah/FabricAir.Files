@@ -55,6 +55,7 @@ class Program
         });
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlite(configuration.GetConnectionString("DefaultConnection")));
+        services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
         services.AddTransient<UserRepository>();
         services.AddTransient<RoleRepository>();
         services.AddTransient<FileRepository>();
@@ -90,7 +91,7 @@ class Program
             app.UseSwaggerUI();
 
             using var scope = app.Services.CreateScope();
-            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            var dbContext = scope.ServiceProvider.GetRequiredService<IApplicationDbContext>();
             SeedData.Initialize(dbContext);
         }
 

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FabricAir.Files.Data;
 
-public partial class ApplicationDbContext : DbContext
+public partial class ApplicationDbContext : DbContext, IApplicationDbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 

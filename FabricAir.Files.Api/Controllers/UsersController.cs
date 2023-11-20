@@ -86,7 +86,7 @@ namespace FabricAir.Files.Api.Controllers
             {
                 Roles = new Role[] { role }
             };
-            _ = await _userRepository.Create(newUser);
+            _ = await _userRepository.CreateAsync(newUser);
             return newUser;
         }
 

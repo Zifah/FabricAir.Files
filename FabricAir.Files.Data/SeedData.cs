@@ -5,7 +5,7 @@ using File = FabricAir.Files.Data.Entities.File;
 namespace FabricAir.Files.Data;
 public class SeedData
 {
-    public static void Initialize(ApplicationDbContext context)
+    public static void Initialize(IApplicationDbContext context)
     {
         SeedRoles(context);
         SeedFileGroups(context);
@@ -13,7 +13,7 @@ public class SeedData
         SeedFiles(context);
     }
 
-    private static void SeedRoles(ApplicationDbContext context)
+    private static void SeedRoles(IApplicationDbContext context)
     {
         if (!context.Roles.Any())
         {
@@ -26,7 +26,7 @@ public class SeedData
         }
     }
 
-    private static void SeedFileGroups(ApplicationDbContext context)
+    private static void SeedFileGroups(IApplicationDbContext context)
     {
         if (!context.FileGroups.Any())
         {
@@ -55,7 +55,7 @@ public class SeedData
         }
     }
 
-    private static void SeedUsers(ApplicationDbContext context)
+    private static void SeedUsers(IApplicationDbContext context)
     {
         if (!context.Users.Any())
         {
@@ -74,7 +74,7 @@ public class SeedData
         }
     }
 
-    private static void SeedFiles(ApplicationDbContext context)
+    private static void SeedFiles(IApplicationDbContext context)
     {
         if (!context.Files.Any())
         {

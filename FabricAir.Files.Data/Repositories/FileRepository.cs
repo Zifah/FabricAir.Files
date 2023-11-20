@@ -7,9 +7,9 @@ namespace FabricAir.Files.Data.Repositories
 {
     public class FileRepository
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly IApplicationDbContext _dbContext;
 
-        public FileRepository(ApplicationDbContext dbContext)
+        public FileRepository(IApplicationDbContext dbContext)
         {
             Require.NotNull(dbContext.Files, nameof(dbContext.Files));
             Require.NotNull(dbContext.Users, nameof(dbContext.Users));

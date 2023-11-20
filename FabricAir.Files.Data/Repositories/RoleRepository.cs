@@ -6,9 +6,9 @@ namespace FabricAir.Files.Data.Repositories
 {
     public class RoleRepository
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly IApplicationDbContext _dbContext;
 
-        public RoleRepository(ApplicationDbContext dbContext)
+        public RoleRepository(IApplicationDbContext dbContext)
         {
             Require.NotNull(dbContext.Roles, nameof(dbContext.Roles));
             _dbContext = dbContext;

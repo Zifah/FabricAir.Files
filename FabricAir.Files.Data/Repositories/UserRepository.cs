@@ -6,9 +6,9 @@ namespace FabricAir.Files.Data.Repositories
 {
     public class UserRepository
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly IApplicationDbContext _dbContext;
 
-        public UserRepository(ApplicationDbContext dbContext)
+        public UserRepository(IApplicationDbContext dbContext)
         {
             Require.NotNull(dbContext.Users, nameof(dbContext.Users));
             _dbContext = dbContext;
@@ -24,10 +24,10 @@ namespace FabricAir.Files.Data.Repositories
             return await _dbContext.Users.Include(u => u.Roles).ToArrayAsync();
         }
 
-        public async Task<int> Create(User newUser)
+        public async Task<int> CreateAsync(User newUser)
         {
             _dbContext.Users.Add(newUser);
-            return await _dbContext.SaveChangesAsync();
+            return await _dbContext.SaveChangesAsync(default);
         }
     }
 }
