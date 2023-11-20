@@ -14,7 +14,7 @@ namespace FabricAir.Files.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.14");
 
-            modelBuilder.Entity("FabricAir.Files.Data.File", b =>
+            modelBuilder.Entity("FabricAir.Files.Data.Entities.File", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -38,10 +38,10 @@ namespace FabricAir.Files.Data.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Files", (string)null);
+                    b.ToTable("Files");
                 });
 
-            modelBuilder.Entity("FabricAir.Files.Data.FileGroup", b =>
+            modelBuilder.Entity("FabricAir.Files.Data.Entities.FileGroup", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -56,10 +56,10 @@ namespace FabricAir.Files.Data.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("FileGroups", (string)null);
+                    b.ToTable("FileGroups");
                 });
 
-            modelBuilder.Entity("FabricAir.Files.Data.Role", b =>
+            modelBuilder.Entity("FabricAir.Files.Data.Entities.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -78,10 +78,10 @@ namespace FabricAir.Files.Data.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("FabricAir.Files.Data.User", b =>
+            modelBuilder.Entity("FabricAir.Files.Data.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -108,7 +108,7 @@ namespace FabricAir.Files.Data.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("FileGroupRole", b =>
@@ -141,9 +141,9 @@ namespace FabricAir.Files.Data.Migrations
                     b.ToTable("UserRoles", (string)null);
                 });
 
-            modelBuilder.Entity("FabricAir.Files.Data.File", b =>
+            modelBuilder.Entity("FabricAir.Files.Data.Entities.File", b =>
                 {
-                    b.HasOne("FabricAir.Files.Data.FileGroup", "Group")
+                    b.HasOne("FabricAir.Files.Data.Entities.FileGroup", "Group")
                         .WithMany("Files")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -154,13 +154,13 @@ namespace FabricAir.Files.Data.Migrations
 
             modelBuilder.Entity("FileGroupRole", b =>
                 {
-                    b.HasOne("FabricAir.Files.Data.FileGroup", null)
+                    b.HasOne("FabricAir.Files.Data.Entities.FileGroup", null)
                         .WithMany()
                         .HasForeignKey("FileGroupsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FabricAir.Files.Data.Role", null)
+                    b.HasOne("FabricAir.Files.Data.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RolesId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -169,20 +169,20 @@ namespace FabricAir.Files.Data.Migrations
 
             modelBuilder.Entity("RoleUser", b =>
                 {
-                    b.HasOne("FabricAir.Files.Data.Role", null)
+                    b.HasOne("FabricAir.Files.Data.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RolesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FabricAir.Files.Data.User", null)
+                    b.HasOne("FabricAir.Files.Data.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FabricAir.Files.Data.FileGroup", b =>
+            modelBuilder.Entity("FabricAir.Files.Data.Entities.FileGroup", b =>
                 {
                     b.Navigation("Files");
                 });
