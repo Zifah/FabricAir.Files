@@ -1,3 +1,4 @@
+using FabricAir.Files.Api.Middleware;
 using FabricAir.Files.Data;
 using FabricAir.Files.Data.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -19,6 +20,7 @@ class Program
 
     static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
+        services.AddSingleton<ExceptionHandlingMiddleware>();
         services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
         var jwtSettings = configuration.GetRequiredSection("JwtSettings").Get<JwtSettings>();
         var key = Encoding.ASCII.GetBytes(jwtSettings!.SecretKey);
@@ -85,6 +87,8 @@ class Program
 
     static void Configure(WebApplication app, IHostEnvironment environment)
     {
+        app.UseMiddleware<ExceptionHandlingMiddleware>();
+
         if (environment.IsDevelopment())
         {
             app.UseSwagger();

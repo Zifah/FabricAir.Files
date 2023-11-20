@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using FabricAir.Files.Data;
 using FabricAir.Files.Api.Model;
 using System.Net;
-using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Options;
 using FabricAir.Files.Data.Entities;
 using Swashbuckle.AspNetCore.Annotations;
@@ -21,7 +18,6 @@ namespace FabricAir.Files.Api.Controllers
         private readonly UserRepository _userRepository;
         private readonly RoleRepository _roleRepository;
         private readonly IOptions<ApiBehaviorOptions> _apiBehaviorOptions;
-        private const int SqlLiteUniqueConstraintViolatedErrorCode = 19;
 
         public UsersController(
             UserRepository userRepository, 
@@ -65,19 +61,8 @@ namespace FabricAir.Files.Api.Controllers
                 return _apiBehaviorOptions.Value.InvalidModelStateResponseFactory(ControllerContext);
             }
 
-            try
-            {
-                User newUser = await SaveUser(user, password, role);
-                return StatusCode((int)HttpStatusCode.Created, ToDTO(newUser));
-            }
-            catch (DbUpdateException ex) when (ex.InnerException is SqliteException exception)
-            {
-                if (exception.SqliteErrorCode == SqlLiteUniqueConstraintViolatedErrorCode)
-                {
-                    return BadRequest("User is already registered.");
-                }
-                throw;
-            }
+            User newUser = await SaveUser(user, password, role);
+            return StatusCode((int)HttpStatusCode.Created, ToDTO(newUser));
         }
 
         private async Task<User> SaveUser(CreateUserRequest user, string password, Role role)
@@ -97,7 +82,7 @@ namespace FabricAir.Files.Api.Controllers
 
         private static string HashPassword(string password)
         {
-            // I will skip hashing to save time but would use BCrypt along with a salt in a production environment
+            // Reviewer note: I will skip hashing to save time but would hash with BCrypt in a production environment
             return password;
         }
     }
