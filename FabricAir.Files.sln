@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FabricAir.Files.Api", "FabricAir.Files.Api\FabricAir.Files.Api.csproj", "{6D2E045F-4FF5-4539-B99C-0F3611519B9F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FabricAir.Files.Api", "FabricAir.Files.Api\FabricAir.Files.Api.csproj", "{6D2E045F-4FF5-4539-B99C-0F3611519B9F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FabricAir.Files.Data", "FabricAir.Files.Data\FabricAir.Files.Data.csproj", "{E33D8102-2EAE-48C0-A963-50D640CFC28C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FabricAir.Files.Common", "FabricAir.Files.Common\FabricAir.Files.Common.csproj", "{713E5988-6124-438D-8E22-6A326C4BA100}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{6D2E045F-4FF5-4539-B99C-0F3611519B9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D2E045F-4FF5-4539-B99C-0F3611519B9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D2E045F-4FF5-4539-B99C-0F3611519B9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E33D8102-2EAE-48C0-A963-50D640CFC28C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E33D8102-2EAE-48C0-A963-50D640CFC28C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E33D8102-2EAE-48C0-A963-50D640CFC28C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E33D8102-2EAE-48C0-A963-50D640CFC28C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{713E5988-6124-438D-8E22-6A326C4BA100}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{713E5988-6124-438D-8E22-6A326C4BA100}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{713E5988-6124-438D-8E22-6A326C4BA100}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{713E5988-6124-438D-8E22-6A326C4BA100}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

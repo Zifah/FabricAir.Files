@@ -1,4 +1,4 @@
-﻿namespace FabricAir.Files.Api.Data.Entities;
+﻿namespace FabricAir.Files.Data.Entities;
 
 public record File(string Name, int GroupId, string URL, int Id = 0)
 {

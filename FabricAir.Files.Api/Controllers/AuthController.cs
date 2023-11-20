@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using FabricAir.Files.Api.Data;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -8,7 +7,8 @@ using System.Security.Claims;
 using System.Text;
 using Swashbuckle.AspNetCore.Annotations;
 using FabricAir.Files.Api.Model;
-using FabricAir.Files.Api.Data.Entities;
+using FabricAir.Files.Data;
+using FabricAir.Files.Data.Entities;
 
 namespace FabricAir.Files.Api.Controllers
 {

@@ -1,11 +1,12 @@
-﻿using FabricAir.Files.Api.Data;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using FabricAir.Files.Api.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Annotations;
-using FabricAir.Files.Api.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
+using FabricAir.Files.Data;
+using FabricAir.Files.Data.Entities;
+using File = FabricAir.Files.Data.Entities.File;
 
 namespace FabricAir.Files.Api.Controllers
 {
@@ -105,7 +106,7 @@ namespace FabricAir.Files.Api.Controllers
             return User!.Identity!.Name!;
         }
 
-        private static async Task<IEnumerable<FileDTO>> ToDTOAsync(IQueryable<Data.Entities.File> userFiles) =>
+        private static async Task<IEnumerable<FileDTO>> ToDTOAsync(IQueryable<File> userFiles) =>
             await userFiles.Select(f => new FileDTO(f.Name, f.Group.Name, f.URL)).ToListAsync();
     }
 }

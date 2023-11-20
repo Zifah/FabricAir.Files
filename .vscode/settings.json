@@ -1,0 +1,11 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 100,
+            "driver": "SQLite",
+            "name": "FabricAir.Files",
+            "database": "${workspaceFolder:FabricAir.Files}/FabricAir.Files.Api/Data/FabricAirFiles.db"
+        }
+    ],
+    "sqltools.useNodeRuntime": true
+}

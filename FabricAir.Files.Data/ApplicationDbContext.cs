@@ -1,8 +1,8 @@
-﻿using FabricAir.Files.Api.Data.Entities;
+﻿using FabricAir.Files.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace FabricAir.Files.Api.Data;
-// Define your DbContext
+namespace FabricAir.Files.Data;
+
 public partial class ApplicationDbContext : DbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }

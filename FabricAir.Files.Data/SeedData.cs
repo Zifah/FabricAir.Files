@@ -1,7 +1,8 @@
-﻿using FabricAir.Files.Api.Data.Entities;
-using File = FabricAir.Files.Api.Data.Entities.File;
+﻿using FabricAir.Files.Common;
+using FabricAir.Files.Data.Entities;
+using File = FabricAir.Files.Data.Entities.File;
 
-namespace FabricAir.Files.Api.Data;
+namespace FabricAir.Files.Data;
 public class SeedData
 {
     public static void Initialize(ApplicationDbContext context)

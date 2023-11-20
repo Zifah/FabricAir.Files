@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using FabricAir.Files.Api.Data;
+using FabricAir.Files.Data;
 using FabricAir.Files.Api.Model;
 using System.Net;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Options;
-using FabricAir.Files.Api.Data.Entities;
+using FabricAir.Files.Data.Entities;
 using Swashbuckle.AspNetCore.Annotations;
 using Microsoft.AspNetCore.Authorization;
 

@@ -1,4 +1,4 @@
-using FabricAir.Files.Api.Data;
+using FabricAir.Files.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
