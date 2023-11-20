@@ -6,7 +6,6 @@ using FabricAir.Files.Data.Entities;
 using File = FabricAir.Files.Data.Entities.File;
 using FabricAir.Files.Data.Repositories;
 using FabricAir.Files.Common;
-using Microsoft.EntityFrameworkCore;
 
 namespace FabricAir.Files.Api.Controllers
 {
@@ -47,11 +46,9 @@ namespace FabricAir.Files.Api.Controllers
         public async Task<IActionResult> GetFileGroups()
         {
             var userFileGroups = await _fileRepository.GetFileGroupsAsync(GetUserEmail());
-            return Ok(ToDTO(userFileGroups));
+            return Ok(userFileGroups.Select(fg => new FileGroupDTO(fg.Name)));
         }
 
-        private static IEnumerable<FileGroupDTO> ToDTO(IEnumerable<FileGroup> userFileGroups) =>
-            userFileGroups.Select(fg => new FileGroupDTO(fg.Name));
         private string GetUserEmail()
         {
             return User!.Identity!.Name!;
