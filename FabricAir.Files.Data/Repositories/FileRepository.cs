@@ -18,29 +18,28 @@ namespace FabricAir.Files.Data.Repositories
 
         public async Task<IEnumerable<File>> GetFilesAsync(string userEmailAddress)
         {
-            var user = await _dbContext.Users.Include(u => u.Roles)
-                .SingleOrDefaultAsync(u => u.Email == userEmailAddress);
-
-            if (user == null)
-            {
-                return Array.Empty<File>();
-            }
-
-            return _dbContext.Files.Where(f => f.Group.Roles.Any(r => user.Roles.Contains(r))).Include(f => f.Group);
+            return await _dbContext.Files
+                .Include(f => f.Group)
+                .Where(f => f.Group
+                                .Roles
+                                .Any(gr => _dbContext
+                                            .Users.Any(u => u.Email == userEmailAddress && u.Roles.Contains(gr))
+                                    )
+                      )
+                .ToArrayAsync();
         }
 
         public async Task<IEnumerable<FileGroup>> GetFileGroupsAsync(string userEmailAddress)
         {
-            var user = await _dbContext.Users
-                .Include(u => u.Roles)
-                .SingleOrDefaultAsync(x => x.Email == userEmailAddress);
-
-            if (user == null)
-            {
-                return Array.Empty<FileGroup>();
-            }
-
-            return _dbContext.FileGroups.Where(g => g.Roles.Any(r => user.Roles.Contains(r)));
+            return await _dbContext
+                .FileGroups
+                .Where(g => g.Roles
+                                .Any(r => _dbContext
+                                            .Users
+                                            .Any(u => u.Email == userEmailAddress && u.Roles.Contains(r))
+                                     )
+                      )
+                .ToArrayAsync();
         }
     }
 }
