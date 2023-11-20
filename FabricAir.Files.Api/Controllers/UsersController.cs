@@ -61,7 +61,7 @@ namespace FabricAir.Files.Api.Controllers
 
             if (role == null)
             {
-                ModelState.AddModelError(nameof(user.Role), "The specific user role is not valid");
+                ModelState.AddModelError(nameof(user.Role), "The specified user role is not valid");
                 return _apiBehaviorOptions.Value.InvalidModelStateResponseFactory(ControllerContext);
             }
 
