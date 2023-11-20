@@ -7,6 +7,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using FabricAir.Files.Data.Repositories;
 using FabricAir.Files.Common;
+using System.ComponentModel.DataAnnotations;
 
 namespace FabricAir.Files.Api.Controllers
 {
@@ -20,8 +21,8 @@ namespace FabricAir.Files.Api.Controllers
         private readonly IOptions<ApiBehaviorOptions> _apiBehaviorOptions;
 
         public UsersController(
-            UserRepository userRepository, 
-            RoleRepository roleRepository, 
+            UserRepository userRepository,
+            RoleRepository roleRepository,
             IOptions<ApiBehaviorOptions> apiBehaviorOptions)
         {
             Require.NotNull(userRepository, nameof(userRepository));
@@ -33,12 +34,33 @@ namespace FabricAir.Files.Api.Controllers
             _apiBehaviorOptions = apiBehaviorOptions;
         }
 
+
+
+        [HttpGet("{emailAddress}")]
+        [SwaggerOperation("Get user information")]
+        public async Task<ActionResult<IEnumerable<UserDTO>>> GetUser([FromRoute][EmailAddress] string emailAddress)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var theUser = await _userRepository.GetByEmailAsync(emailAddress);
+
+            if(theUser == null)
+            {
+                return NotFound("User does not exist.");
+            }
+
+            return Ok(ToDTO(theUser));
+        }
+
         [HttpGet]
         [SwaggerOperation("Fetch all users")]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
         {
             var allUsers = await _userRepository.GetAllAsync();
-            return Ok(allUsers.Select(ToDTO));
+            return Ok(allUsers.Select(u => new UserDTO(u.Id, u.FirstName, u.LastName, u.Email) { Roles = null })); ;
         }
 
         [HttpPost]

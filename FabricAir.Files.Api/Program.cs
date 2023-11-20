@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using System.Text.Json.Serialization;
 
 class Program
 {
@@ -27,7 +28,12 @@ class Program
 
         ConfigureAuthentication(services, key);
 
-        services.AddControllers();
+        services
+            .AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+            });
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(c =>
         {

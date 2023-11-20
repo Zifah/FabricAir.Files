@@ -43,7 +43,7 @@ namespace FabricAir.Files.Api.Controllers
             return Ok(new { Token = token });
         }
 
-        private bool VerifyHashedPassword(string passwordHash, string enteredPassword)
+        private static bool VerifyHashedPassword(string passwordHash, string enteredPassword)
         {
             return passwordHash.Equals(enteredPassword);
         }

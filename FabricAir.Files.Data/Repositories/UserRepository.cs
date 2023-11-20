@@ -24,7 +24,7 @@ namespace FabricAir.Files.Data.Repositories
 
         public async Task<IEnumerable<User>> GetAllAsync()
         {
-            return await _dbContext.Users.Include(u => u.Roles).ToArrayAsync();
+            return await _dbContext.Users.ToArrayAsync();
         }
 
         public async Task<int> CreateAsync(User newUser)
