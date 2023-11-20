@@ -57,6 +57,7 @@ class Program
             options.UseSqlite(configuration.GetConnectionString("DefaultConnection")));
         services.AddTransient<UserRepository>();
         services.AddTransient<RoleRepository>();
+        services.AddTransient<FileRepository>();
     }
 
     static void ConfigureAuthentication(IServiceCollection services, byte[] key)

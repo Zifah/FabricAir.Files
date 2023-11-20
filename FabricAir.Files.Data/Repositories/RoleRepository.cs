@@ -1,4 +1,5 @@
-﻿using FabricAir.Files.Data.Entities;
+﻿using FabricAir.Files.Common;
+using FabricAir.Files.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace FabricAir.Files.Data.Repositories
@@ -9,6 +10,7 @@ namespace FabricAir.Files.Data.Repositories
 
         public RoleRepository(ApplicationDbContext dbContext)
         {
+            Require.NotNull(dbContext.Roles, nameof(dbContext.Roles));
             _dbContext = dbContext;
         }
 

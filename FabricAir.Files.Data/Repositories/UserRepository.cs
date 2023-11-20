@@ -1,4 +1,5 @@
-﻿using FabricAir.Files.Data.Entities;
+﻿using FabricAir.Files.Common;
+using FabricAir.Files.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace FabricAir.Files.Data.Repositories
@@ -9,13 +10,12 @@ namespace FabricAir.Files.Data.Repositories
 
         public UserRepository(ApplicationDbContext dbContext)
         {
+            Require.NotNull(dbContext.Users, nameof(dbContext.Users));
             _dbContext = dbContext;
-            // TODO Hafiz: Validates that Users collection is not null
         }
 
         public async Task<User?> GetByEmailAsync(string emailAddress)
         {
-
             return await _dbContext.Users.Include(u => u.Roles).SingleOrDefaultAsync(u => u.Email == emailAddress);
         }
 

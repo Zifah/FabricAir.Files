@@ -8,6 +8,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using FabricAir.Files.Data.Entities;
 using FabricAir.Files.Data.Repositories;
 using FabricAir.Files.Api.Model;
+using FabricAir.Files.Common;
 
 namespace FabricAir.Files.Api.Controllers
 {
@@ -21,6 +22,8 @@ namespace FabricAir.Files.Api.Controllers
 
         public AuthController(UserRepository userRepository, IOptions<JwtSettings> jwtSettings)
         {
+            Require.NotNull(userRepository, nameof(userRepository));
+
             _userRepository = userRepository;
             _jwtSettings = jwtSettings;
         }

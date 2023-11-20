@@ -9,6 +9,7 @@ using FabricAir.Files.Data.Entities;
 using Swashbuckle.AspNetCore.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using FabricAir.Files.Data.Repositories;
+using FabricAir.Files.Common;
 
 namespace FabricAir.Files.Api.Controllers
 {
@@ -27,6 +28,10 @@ namespace FabricAir.Files.Api.Controllers
             RoleRepository roleRepository, 
             IOptions<ApiBehaviorOptions> apiBehaviorOptions)
         {
+            Require.NotNull(userRepository, nameof(userRepository));
+            Require.NotNull(roleRepository, nameof(roleRepository));
+            Require.NotNull(apiBehaviorOptions, nameof(apiBehaviorOptions));
+
             _userRepository = userRepository;
             _roleRepository = roleRepository;
             _apiBehaviorOptions = apiBehaviorOptions;
