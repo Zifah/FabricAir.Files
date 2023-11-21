@@ -28,11 +28,6 @@ namespace FabricAir.Files.Api.Middleware
             }
         }
 
-        /// <summary>
-        /// Handler for NotImplementedException.
-        /// </summary>
-        /// <param name="context">The http context.</param>
-        /// <param name="exception">The raised exception.</param>
         private void HandleException<T>(HttpContext context, T exception) where T : Exception
         {
             string message;
